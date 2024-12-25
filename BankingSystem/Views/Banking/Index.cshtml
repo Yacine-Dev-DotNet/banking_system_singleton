@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Banking System";
+}
+
+<h1>Banking System</h1>
+
+<!-- Zone pour afficher le solde -->
+<div>
+    <h2>Check Balance</h2>
+    <button onclick="checkBalance()">Check Balance</button>
+    <p id="balance"></p>
+</div>
+
+<!-- Zone pour effectuer un retrait -->
+<div>
+    <h2>Withdraw</h2>
+    <input type="number" id="withdrawAmount" placeholder="Enter amount" />
+    <button onclick="withdraw()">Withdraw</button>
+    <p id="withdrawResult"></p>
+</div>
+
+<!-- Zone pour effectuer un dépôt -->
+<div>
+    <h2>Deposit</h2>
+    <input type="number" id="depositAmount" placeholder="Enter amount" />
+    <button onclick="deposit()">Deposit</button>
+    <p id="depositResult"></p>
+</div>
+
+@section Scripts {
+    <script>
+        async function checkBalance() {
+            const response = await fetch('/Banking/GetBalance');
+            const text = await response.text();
+            document.getElementById('balance').innerText = text;
+        }
+
+        async function withdraw() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const response = await fetch('/Banking/Withdraw', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(amount)
+            });
+            const text = await response.text();
+            document.getElementById('withdrawResult').innerText = text;
+        }
+
+        async function deposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const response = await fetch('/Banking/Deposit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(amount)
+            });
+            const text = await response.text();
+            document.getElementById('depositResult').innerText = text;
+        }
+    </script>
+}
